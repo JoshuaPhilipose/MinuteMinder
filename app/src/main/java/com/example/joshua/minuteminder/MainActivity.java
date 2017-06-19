@@ -1,6 +1,10 @@
 package com.example.joshua.minuteminder;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -21,27 +25,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.joshua.minuteminder.R.id.container;
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
-    private Button _button;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,23 +66,59 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        NotificationTimerTask myTask = new NotificationTimerTask();
+        Timer myTimer = new Timer();
+
+        //Scheduling paramters are task, time till start, and time upon which to repeat
+        //30000 milliseconds is 30 seconds
+        myTimer.schedule(myTask, 5000, 30000);
+
     }
 
-//    public static void playSound() {
-//        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder mBuilder =
-//                new NotificationCompat.Builder(this)
-//                        .setSmallIcon(R.drawable.clock)
-//                        .setContentTitle("Minute Minder")
-//                        .setSound(uri)
-//                        .setContentText("Beep!");
-//        // Sets an ID for the notification
-//        int mNotificationId = 1;
-//        // Gets an instance of the NotificationManager service
-//        NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        // Builds the notification and issues it.
-//        mNotifyMgr.notify(mNotificationId, mBuilder.build());
-//    }
+    //Creates concrete class for abstract TimerTask
+    class NotificationTimerTask extends TimerTask {
+        public void run() {
+            createNotification(getApplicationContext(), getCurrTime());
+        }
+    }
+
+    private void createNotification(Context context, String message) {
+
+        long when = System.currentTimeMillis();
+        String appname = context.getResources().getString(R.string.app_name);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification;
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
+        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context);
+        notification = builder.setContentIntent(contentIntent)
+                .setSmallIcon(R.drawable.clock)
+                .setTicker(appname)
+                .setWhen(0)
+                .setAutoCancel(true)
+                .setContentTitle(appname)
+                .setContentText(message)
+                .setSound(uri)
+                .build();
+        notificationManager.notify((int) when, notification);
+    }
+
+    private String getCurrTime() {
+        calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+        //Ensuring minute is always double digit
+        String min = minute > 9 ? "" + minute : "0" + minute;
+        //Ternary expression to set AM/PM
+        String am_pm = (int) calendar.get(Calendar.AM_PM) == Calendar.AM ? " AM" : " PM";
+        String returner = "The time is ";
+        returner += hour + ":" + min + am_pm;
+        return returner;
+    }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
 
-            // Get access to the buttons
+            // NOTIFICATION BUTTON
             final Button notifButton = (Button)rootView.findViewById(R.id.button);
             notifButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -159,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
                     mNotifyMgr.notify(mNotificationId, mBuilder.build());
                 }
             });
+
+            // TOGGLE SWITCH NOTIFICATION
+            final Switch toggleSwitch = (Switch)rootView.findViewById(R.id.switch1);
+            toggleSwitch.setChecked(true);
+
+
             return rootView;
         }
     }

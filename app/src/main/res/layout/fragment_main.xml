@@ -22,4 +22,23 @@
         android:layout_marginBottom="157dp"
         android:text="Button" />
 
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp"
+        android:text="ToggleButton" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/toggleButton"
+        android:layout_alignEnd="@+id/toggleButton"
+        android:layout_alignRight="@+id/toggleButton"
+        android:layout_marginBottom="21dp"
+        android:text="Switch" />
+
 </RelativeLayout>
