@@ -25,8 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.Calendar;
 import java.util.Timer;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private Calendar calendar;
+    private static Boolean minderToggle = false;
+    private static int milliseconds = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,29 +61,21 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
         NotificationTimerTask myTask = new NotificationTimerTask();
         Timer myTimer = new Timer();
 
         //Scheduling paramters are task, time till start, and time upon which to repeat
         //30000 milliseconds is 30 seconds
-        myTimer.schedule(myTask, 5000, 30000);
+        myTimer.schedule(myTask, 5000, milliseconds);
 
     }
 
     //Creates concrete class for abstract TimerTask
     class NotificationTimerTask extends TimerTask {
         public void run() {
-            createNotification(getApplicationContext(), getCurrTime());
+            if (minderToggle) {
+                createNotification(getApplicationContext(), getCurrTime());
+            }
         }
     }
 
@@ -194,9 +191,31 @@ public class MainActivity extends AppCompatActivity {
             });
 
             // TOGGLE SWITCH NOTIFICATION
-            final Switch toggleSwitch = (Switch)rootView.findViewById(R.id.switch1);
-            toggleSwitch.setChecked(true);
+            final ToggleButton toggleSwitch = (ToggleButton) rootView.findViewById(R.id.toggleButton);
+            toggleSwitch.setChecked(false);
 
+
+            toggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        minderToggle = true;
+                    } else {
+                        minderToggle = false;
+                    }
+                }
+            });
+
+
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
+            final EditText input = (EditText) rootView.findViewById(R.id.textView);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    milliseconds = Integer.parseInt(input.getText().toString()) * 1000;
+                    Snackbar.make(view, "Frequency set to every " + (milliseconds/1000) + " seconds.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
 
             return rootView;
         }
