@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -64,9 +61,19 @@ public class MainActivity extends AppCompatActivity {
         NotificationTimerTask myTask = new NotificationTimerTask();
         Timer myTimer = new Timer();
 
-        //Scheduling paramters are task, time till start, and time upon which to repeat
+        //Scheduling parameters are task, time till start, and time upon which to repeat
         //30000 milliseconds is 30 seconds
         myTimer.schedule(myTask, 5000, milliseconds);
+
+
+        Button createMinder = (Button) findViewById(R.id.createMinder);
+        createMinder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CreateMinder.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -168,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+
 
             // NOTIFICATION BUTTON
             final Button notifButton = (Button)rootView.findViewById(R.id.button);
