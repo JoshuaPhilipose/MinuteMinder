@@ -1,6 +1,5 @@
 package com.example.joshua.minuteminder;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,11 +21,6 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-/**
- * Created by Joshua on 6/29/2017.
- */
-
 public class CreateMinder extends AppCompatActivity {
 
     private static Boolean minderToggle = false;
@@ -39,15 +33,7 @@ public class CreateMinder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_minder);
 
-
-
-        CreateMinder.NotificationTimerTask myTask = new NotificationTimerTask();
-        Timer myTimer = new Timer();
-
-        //Scheduling parameters are task, time till start, and time upon which to repeat
-        //30000 milliseconds is 30 seconds
-        myTimer.schedule(myTask, 5000, milliseconds);
-
+        deployMinder(milliseconds);
 
         // TOGGLE SWITCH NOTIFICATION
         final ToggleButton toggleSwitch = (ToggleButton) findViewById(R.id.toggleButton);
@@ -62,19 +48,35 @@ public class CreateMinder extends AppCompatActivity {
             }
         });
 
-
         //SUBMITTING FREQUENCY CHANGE
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
         final EditText input = (EditText) findViewById(R.id.textView);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                milliseconds = Integer.parseInt(input.getText().toString()) * 1000;
-                Snackbar.make(view, "Frequency set to every " + (milliseconds/1000) + " seconds.", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                String inputText = input.getText().toString();
+                if (isIntegerString(inputText) && !inputText.equals("")) {
+                    milliseconds = Integer.parseInt(inputText) * 1000;
+                    deployMinder(milliseconds);
+                    Snackbar.make(view, "Frequency set to every " + (milliseconds/1000) + " seconds.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    Snackbar.make(view, "Please enter a numeric value!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
     //End of onCreate()
+    }
+
+    //Checks if the string is composed of only integers
+    private boolean isIntegerString(String x) {
+        try {
+            int y = Integer.parseInt(x);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 
@@ -87,6 +89,7 @@ public class CreateMinder extends AppCompatActivity {
         }
     }
 
+    //Sets up the "current time is" notification format
     private void createNotification(Context context, String message) {
 
         long when = System.currentTimeMillis();
@@ -109,6 +112,7 @@ public class CreateMinder extends AppCompatActivity {
         notificationManager.notify((int) when, notification);
     }
 
+    //Returns current time in a formatted string
     private String getCurrTime() {
         calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR);
@@ -120,5 +124,14 @@ public class CreateMinder extends AppCompatActivity {
         String returner = "The time is ";
         returner += hour + ":" + min + am_pm;
         return returner;
+    }
+
+    private void deployMinder(int m) {
+        final NotificationTimerTask myTask = new NotificationTimerTask();
+        final Timer myTimer = new Timer();
+
+        //Scheduling parameters are task, time till start, and time upon which to repeat
+        //30000 milliseconds is 30 seconds
+        myTimer.schedule(myTask, 5000, m);
     }
 }
