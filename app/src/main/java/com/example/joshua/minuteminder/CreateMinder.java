@@ -38,9 +38,9 @@ public class CreateMinder extends AppCompatActivity {
         toggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-//                    minder1.setIsActive(true);
+                    minder1.setIsActive(true);
                 } else {
-//                    minder1.setIsActive(false);
+                    minder1.setIsActive(false);
                 }
             }
         });
@@ -54,8 +54,8 @@ public class CreateMinder extends AppCompatActivity {
                 String inputText = input.getText().toString();
                 if (isIntegerString(inputText) && !inputText.equals("")) {
                     milliseconds = Integer.parseInt(inputText) * 1000;
-//                    minder1.setFrequency(milliseconds);
-//                    minder1.deployMinder();
+                    minder1.setFrequency(milliseconds);
+                    minder1.deployMinder();
                     Snackbar.make(view, "Frequency set to every " + (milliseconds/1000) + " seconds.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
