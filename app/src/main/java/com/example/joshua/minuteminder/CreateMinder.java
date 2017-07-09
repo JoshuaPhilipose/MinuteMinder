@@ -23,17 +23,14 @@ import java.util.TimerTask;
 
 public class CreateMinder extends AppCompatActivity {
 
-    private static Boolean minderToggle = false;
-    private static int milliseconds = 5000;
-    private Calendar calendar;
-
+//    private Minder minder1 = new Minder(5000, getApplicationContext());
+    private int milliseconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_minder);
 
-        deployMinder(milliseconds);
 
         // TOGGLE SWITCH NOTIFICATION
         final ToggleButton toggleSwitch = (ToggleButton) findViewById(R.id.toggleButton);
@@ -41,9 +38,9 @@ public class CreateMinder extends AppCompatActivity {
         toggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    minderToggle = true;
+//                    minder1.setIsActive(true);
                 } else {
-                    minderToggle = false;
+//                    minder1.setIsActive(false);
                 }
             }
         });
@@ -57,7 +54,8 @@ public class CreateMinder extends AppCompatActivity {
                 String inputText = input.getText().toString();
                 if (isIntegerString(inputText) && !inputText.equals("")) {
                     milliseconds = Integer.parseInt(inputText) * 1000;
-                    deployMinder(milliseconds);
+//                    minder1.setFrequency(milliseconds);
+//                    minder1.deployMinder();
                     Snackbar.make(view, "Frequency set to every " + (milliseconds/1000) + " seconds.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
@@ -77,61 +75,5 @@ public class CreateMinder extends AppCompatActivity {
         } catch (Exception e) {
             return false;
         }
-    }
-
-
-    //Creates concrete class for abstract TimerTask
-    class NotificationTimerTask extends TimerTask {
-        public void run() {
-            if (minderToggle) {
-                createNotification(getApplicationContext(), getCurrTime());
-            }
-        }
-    }
-
-    //Sets up the "current time is" notification format
-    private void createNotification(Context context, String message) {
-
-        long when = System.currentTimeMillis();
-        String appname = context.getResources().getString(R.string.app_name);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification;
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, CreateMinder.class), 0);
-        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                context);
-        notification = builder.setContentIntent(contentIntent)
-                .setSmallIcon(R.drawable.clock)
-                .setTicker(appname)
-                .setWhen(0)
-                .setAutoCancel(true)
-                .setContentTitle(appname)
-                .setContentText(message)
-                .setSound(uri)
-                .build();
-        notificationManager.notify((int) when, notification);
-    }
-
-    //Returns current time in a formatted string
-    private String getCurrTime() {
-        calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR);
-        int minute = calendar.get(Calendar.MINUTE);
-        //Ensuring minute is always double digit
-        String min = minute > 9 ? "" + minute : "0" + minute;
-        //Ternary expression to set AM/PM
-        String am_pm = (int) calendar.get(Calendar.AM_PM) == Calendar.AM ? " AM" : " PM";
-        String returner = "The time is ";
-        returner += hour + ":" + min + am_pm;
-        return returner;
-    }
-
-    private void deployMinder(int m) {
-        final NotificationTimerTask myTask = new NotificationTimerTask();
-        final Timer myTimer = new Timer();
-
-        //Scheduling parameters are task, time till start, and time upon which to repeat
-        //30000 milliseconds is 30 seconds
-        myTimer.schedule(myTask, 5000, m);
     }
 }
