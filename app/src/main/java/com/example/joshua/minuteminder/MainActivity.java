@@ -12,7 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import static com.example.joshua.minuteminder.R.id.container;
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private static ArrayList<Minder> minderArrayList = new ArrayList<Minder>(10);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public static void addMinder(Minder minder) {
+        minderArrayList.add(minder);
+    }
+
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            Button createMinder = (Button) rootView.findViewById(R.id.createMinderButton);
+            Button createMinder = (Button) rootView.findViewById(R.id.GoToCreateMinderButton);
             createMinder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -88,6 +96,19 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+
+            Button deleteAllMinders = (Button) rootView.findViewById(R.id.deleteAllMinders);
+            deleteAllMinders.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    minderArrayList = new ArrayList<>(10);
+                }
+            });
+
+            ListView minderList = (ListView) rootView.findViewById(R.id.minderList);
+            ArrayAdapter<Minder> arrayAdapter = new ArrayAdapter<Minder>(getContext(), android.R.layout.simple_list_item_1, minderArrayList );
+
+            minderList.setAdapter(arrayAdapter);
 
             return rootView;
         }

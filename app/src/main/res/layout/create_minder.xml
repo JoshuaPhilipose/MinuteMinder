@@ -23,30 +23,42 @@
             android:layout_height="wrap_content"
             android:text="Minders" />
 
-        <LinearLayout
+
+        <EditText
+            android:id="@+id/minderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="30dp"
+            android:width="210dp"
+            android:hint="Input Minder Name Here" />
+
+        <EditText
+            android:id="@+id/minderFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="30dp"
+            android:width="210dp"
+            android:hint="Input # of Seconds Here" />
+
+
+        <Button
+            android:id="@+id/createMinder"
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="wrap_content"
+            android:text="Create Minder" />
 
-            <EditText
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:layout_marginTop="30dp"
-                android:width="210dp"
-                android:hint="Input # of Seconds Here" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floatingActionButton"
-                android:layout_width="wrap_content"
-                android:layout_height="185dp"
-                android:layout_gravity="bottom|end"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:clickable="true"
-                app:fabSize="mini"
-                app:srcCompat="@mipmap/ic_launcher" />
-        </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="185dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@mipmap/ic_launcher" />
 
         <ToggleButton
             android:id="@+id/toggleButton"

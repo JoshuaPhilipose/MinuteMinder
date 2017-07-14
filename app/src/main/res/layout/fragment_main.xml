@@ -10,13 +10,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.joshua.minuteminder.MainActivity$PlaceholderFragment">
 
+    <ListView
+        android:id="@+id/minderList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="125dp"></ListView>
 
     <Button
-        android:id="@+id/createMinderButton"
+        android:id="@+id/GoToCreateMinderButton"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="75dp"
+        android:text="Create Minder" />
+
+    <Button
+        android:id="@+id/deleteAllMinders"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="25dp"
-        android:text="Create Minder" />
+        android:text="Delete Minders" />
 
 </android.support.design.widget.CoordinatorLayout>
