@@ -18,12 +18,26 @@ public class Minder {
         this.frequency = frequency;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 
     public void toggle() {
         isActive = !isActive;
     }
 
     //Getters and Setters
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getFrequency() {
         return frequency;
     }

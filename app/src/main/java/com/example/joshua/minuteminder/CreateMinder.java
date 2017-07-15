@@ -65,6 +65,8 @@ public class CreateMinder extends AppCompatActivity {
 //            }
 //        });
     //End of onCreate()
+        final Context context = this;
+
         Button createMinder = (Button) findViewById(R.id.createMinder);
         createMinder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +76,9 @@ public class CreateMinder extends AppCompatActivity {
                 String minderName = minderNameEditText.getText().toString();
                 int minderFrequency = Integer.parseInt(minderFrequencyEditText.getText().toString());
                 MainActivity.addMinder(new Minder(minderName, minderFrequency));
+
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
