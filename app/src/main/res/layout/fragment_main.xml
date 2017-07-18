@@ -10,11 +10,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.joshua.minuteminder.MainActivity$PlaceholderFragment">
 
-    <ListView
-        android:id="@+id/minderList"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:text="Minder frequency set to every"
+        android:layout_gravity="center|top"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="125dp"></ListView>
+        android:gravity="center|top">
+
+        <NumberPicker
+            android:id="@+id/minderFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="50dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingBottom="50dp"/>
+
+
+        <NumberPicker
+            android:id="@+id/frequencyUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="140dp"
+        android:paddingBottom="100dp">
+
+        <!--The color toggle is code written first in in values/colors.xml file to create values for certain colors (this is where you should edit those colors if necessary) and then a specific file in res/drawable.-->
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ToggleButton"
+            android:background="@drawable/redgraytoggle"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/GoToCreateMinderButton"
@@ -31,5 +71,7 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="25dp"
         android:text="Delete Minders" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>
