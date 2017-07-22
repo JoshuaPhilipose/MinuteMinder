@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-//    private static boolean minderToggle = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,39 +53,6 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-//        NumberPicker minderFrequency = (NumberPicker) findViewById(R.id.minderFrequency);
-//        String[] nums = new String[60];
-//        for(int i = 0; i < nums.length; i++) {
-//            nums[i] = Integer.toString(i);
-//        }
-//        minderFrequency.setMinValue(1);
-//        minderFrequency.setMaxValue(20);
-//        minderFrequency.setWrapSelectorWheel(false);
-//        minderFrequency.setDisplayedValues(nums);
-//        minderFrequency.setValue(1);
-//
-//        Spinner frequencyUnit = (Spinner) findViewById(R.id.frequencyUnit);
-//
-//
-//        if (minderToggle) {
-//            int frequency = minderFrequency.getValue() * 1000;
-//            if (frequencyUnit.getSelectedItem().equals("Seconds")) {
-//                frequency = frequency;
-//            } else if (frequencyUnit.getSelectedItem().equals("Minutes")) {
-//                frequency = frequency * 60;
-//            } else if (frequencyUnit.getSelectedItem().equals("Hours")) {
-//                frequency = frequency * 60 * 60;
-//            }
-//
-//            NotificationTimerTask myTask = new NotificationTimerTask();
-//            Timer myTimer = new Timer();
-//            myTimer.cancel();
-//            //Scheduling parameters are task, time till start, and time upon which to repeat
-//            //30000 milliseconds is 30 seconds
-//            myTimer.schedule(myTask, 1000, frequency);
-//        }
-
     }
 
     @Override
@@ -112,64 +78,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    public void deployMinder(int timeTillStart, int frequency) {
-//        NotificationTimerTask myTask = new NotificationTimerTask();
-//        Timer myTimer = new Timer();
-//
-//        //Scheduling parameters are task, time till start, and time upon which to repeat
-//        //30000 milliseconds is 30 seconds
-//        myTimer.schedule(myTask, timeTillStart, frequency);
-//    }
-
-//    //Creates concrete class for abstract TimerTask
-//    class NotificationTimerTask extends TimerTask {
-//        public void run() {
-//            createNotification(getApplicationContext(), getCurrTime());
-//
-//        }
-//    }
-//
-//    private void createNotification(Context context, String message) {
-//
-//        long when = System.currentTimeMillis();
-//        String appName = context.getResources().getString(R.string.app_name);
-//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
-//        Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-//                context);
-//        Notification notification = builder.setContentIntent(contentIntent)
-//                .setSmallIcon(R.drawable.clock)
-//                .setTicker(appName)
-//                .setWhen(0)
-//                .setAutoCancel(true)
-//                .setContentTitle(appName)
-//                .setContentText(message)
-//                .setSound(uri)
-//                .build();
-//        notificationManager.notify((int) when, notification);
-//    }
-//
-//    //Returns current time in a formatted string
-//    private String getCurrTime() {
-//        Calendar calendar = Calendar.getInstance();
-//        int hour = calendar.get(Calendar.HOUR);
-//        int minute = calendar.get(Calendar.MINUTE);
-//        //Ensuring minute is always double digit
-//        String min = minute > 9 ? "" + minute : "0" + minute;
-//        //Ternary expression to set AM/PM
-//        String am_pm = (int) calendar.get(Calendar.AM_PM) == Calendar.AM ? " AM" : " PM";
-//        String returner = "The time is ";
-//        returner += hour + ":" + min + am_pm;
-//        return returner;
-//    }
-
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static boolean minderToggle = false;
 
         public PlaceholderFragment() {
         }
+
         public static PlaceholderFragment newInstance(int sectionNumber) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
@@ -197,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
             Spinner frequencyUnit = (Spinner) rootView.findViewById(R.id.frequencyUnit);
 
-
             if (minderToggle) {
                 int frequency = minderFrequency.getValue() * 1000;
                 if (frequencyUnit.getSelectedItem().equals("Seconds")) {
@@ -215,14 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 //30000 milliseconds is 30 seconds
                 myTimer.schedule(myTask, 1000, frequency);
             }
-
-
-
-
-
-
-
-
 
 
             Button updateMinder = (Button) rootView.findViewById(R.id.updateMinderButton);
@@ -243,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-
             return rootView;
         }
 
