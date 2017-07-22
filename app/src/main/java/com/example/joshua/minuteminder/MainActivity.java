@@ -1,6 +1,13 @@
 package com.example.joshua.minuteminder;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
@@ -12,7 +19,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ListView;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.joshua.minuteminder.R.id.container;
 
@@ -37,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -60,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment {
 
+    public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static boolean minderToggle = false;
 
         public PlaceholderFragment() {
         }
@@ -80,16 +98,103 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            Button createMinder = (Button) rootView.findViewById(R.id.createMinderButton);
-            createMinder.setOnClickListener(new View.OnClickListener() {
+
+            NumberPicker minderFrequency = (NumberPicker) rootView.findViewById(R.id.minderFrequency);
+            String[] nums = new String[60];
+            for(int i = 0; i < nums.length; i++) {
+                nums[i] = Integer.toString(i);
+            }
+            minderFrequency.setMinValue(1);
+            minderFrequency.setMaxValue(60);
+            minderFrequency.setWrapSelectorWheel(true);
+            minderFrequency.setDisplayedValues(nums);
+            minderFrequency.setValue(1);
+
+            Spinner frequencyUnit = (Spinner) rootView.findViewById(R.id.frequencyUnit);
+
+            if (minderToggle) {
+                int frequency = minderFrequency.getValue() * 1000;
+                if (frequencyUnit.getSelectedItem().equals("Seconds")) {
+                    frequency = frequency;
+                } else if (frequencyUnit.getSelectedItem().equals("Minutes")) {
+                    frequency = frequency * 60;
+                } else if (frequencyUnit.getSelectedItem().equals("Hours")) {
+                    frequency = frequency * 60 * 60;
+                }
+
+                NotificationTimerTask myTask = new NotificationTimerTask();
+                Timer myTimer = new Timer();
+                myTimer.cancel();
+                //Scheduling parameters are task, time till start, and time upon which to repeat
+                //30000 milliseconds is 30 seconds
+                myTimer.schedule(myTask, 1000, frequency);
+            }
+
+
+            Button updateMinder = (Button) rootView.findViewById(R.id.updateMinderButton);
+            updateMinder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), CreateMinder.class);
-                    startActivity(intent);
+                    //TODO: Figure out how to update this
                 }
             });
 
+            ToggleButton onOff = (ToggleButton) rootView.findViewById(R.id.onOffToggle);
+            onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        minderToggle = true;
+                    } else {
+                        minderToggle = false;
+                    }
+                }
+            });
             return rootView;
+        }
+
+        //Creates concrete class for abstract TimerTask
+        class NotificationTimerTask extends TimerTask {
+            public void run() {
+                createNotification(getCurrTime());
+
+            }
+        }
+
+        private void createNotification(String message) {
+
+            long when = System.currentTimeMillis();
+            String appName = getContext().getResources().getString(R.string.app_name);
+//            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+
+            PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, new Intent(getActivity(), MainActivity.class), 0);
+            Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    getContext());
+            Notification notification = builder.setContentIntent(contentIntent)
+                    .setSmallIcon(R.drawable.clock)
+                    .setTicker(appName)
+                    .setWhen(0)
+                    .setAutoCancel(true)
+                    .setContentTitle(appName)
+                    .setContentText(message)
+                    .setSound(uri)
+                    .build();
+            notificationManager.notify((int) when, notification);
+        }
+
+        //Returns current time in a formatted string
+        private String getCurrTime() {
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR);
+            int minute = calendar.get(Calendar.MINUTE);
+            //Ensuring minute is always double digit
+            String min = minute > 9 ? "" + minute : "0" + minute;
+            //Ternary expression to set AM/PM
+            String am_pm = (int) calendar.get(Calendar.AM_PM) == Calendar.AM ? " AM" : " PM";
+            String returner = "The time is ";
+            returner += hour + ":" + min + am_pm;
+            return returner;
         }
     }
 }

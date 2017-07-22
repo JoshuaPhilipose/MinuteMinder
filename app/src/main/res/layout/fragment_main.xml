@@ -3,20 +3,141 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#FF0000"
     android:paddingBottom="?android:attr/actionBarSize"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.joshua.minuteminder.MainActivity$PlaceholderFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/createMinderButton"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="25dp"
-        android:text="Create Minder" />
+        <!--Top row of buttons-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/updateMinderButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Update Minder" />
+
+            <ToggleButton
+                android:id="@+id/onOffToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ToggleButton" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Minder frequency set to every"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:layout_marginTop="10dp">
+
+            <NumberPicker
+                android:id="@+id/minderFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"/>
+
+
+            <Spinner
+                android:id="@+id/frequencyUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"
+                android:layout_marginTop="80dp"
+                android:entries="@array/unit_array">
+            </Spinner>
+        </LinearLayout>
+
+        <!--Contains all the day toggle buttons-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="10dp">
+
+            <!--The color toggle is code written first in in values/colors.xml file to create values for certain colors (this is where you should edit those colors if necessary) and then a specific file in res/drawable.-->
+            <ToggleButton
+                android:id="@+id/toggleMonday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="S"
+                android:textOn="-S-"
+                android:background="@drawable/redgraytoggle"/>
+            <ToggleButton
+                android:id="@+id/toggleTuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="M"
+                android:textOn="-M-"
+                android:background="@drawable/redgraytoggle"/>
+            <ToggleButton
+                android:id="@+id/toggleWednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="T"
+                android:textOn="-T-"
+                android:background="@drawable/redgraytoggle"/>
+            <ToggleButton
+                android:id="@+id/toggleThursday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="W"
+                android:textOn="-W-"
+                android:background="@drawable/redgraytoggle"/>
+            <ToggleButton
+                android:id="@+id/toggleFriday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="T"
+                android:textOn="-T-"
+                android:background="@drawable/redgraytoggle"/>
+            <ToggleButton
+                android:id="@+id/toggleSaturday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="F"
+                android:textOn="-F-"
+                android:background="@drawable/redgraytoggle"/>
+            <ToggleButton
+                android:id="@+id/toggleSunday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textOff="S"
+                android:textOn="-S-"
+                android:background="@drawable/redgraytoggle"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
 
 </android.support.design.widget.CoordinatorLayout>
