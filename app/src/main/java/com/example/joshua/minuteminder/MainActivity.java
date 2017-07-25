@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static boolean minderToggle = false;
+        private static int startupFrequency = 31;
+        private static Timer timer = new Timer();
+        private NumberPicker minderFrequency;
+        private Spinner frequencyUnit;
 
         public PlaceholderFragment() {
         }
@@ -99,43 +103,25 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 
-            NumberPicker minderFrequency = (NumberPicker) rootView.findViewById(R.id.minderFrequency);
+            minderFrequency = (NumberPicker) rootView.findViewById(R.id.minderFrequency);
             String[] nums = new String[60];
             for(int i = 0; i < nums.length; i++) {
-                nums[i] = Integer.toString(i);
+                nums[i] = Integer.toString(i + 1);
             }
             minderFrequency.setMinValue(1);
             minderFrequency.setMaxValue(60);
             minderFrequency.setWrapSelectorWheel(true);
             minderFrequency.setDisplayedValues(nums);
-            minderFrequency.setValue(1);
+            minderFrequency.setValue(startupFrequency);
 
-            Spinner frequencyUnit = (Spinner) rootView.findViewById(R.id.frequencyUnit);
-
-            if (minderToggle) {
-                int frequency = minderFrequency.getValue() * 1000;
-                if (frequencyUnit.getSelectedItem().equals("Seconds")) {
-                    frequency = frequency;
-                } else if (frequencyUnit.getSelectedItem().equals("Minutes")) {
-                    frequency = frequency * 60;
-                } else if (frequencyUnit.getSelectedItem().equals("Hours")) {
-                    frequency = frequency * 60 * 60;
-                }
-
-                NotificationTimerTask myTask = new NotificationTimerTask();
-                Timer myTimer = new Timer();
-                myTimer.cancel();
-                //Scheduling parameters are task, time till start, and time upon which to repeat
-                //30000 milliseconds is 30 seconds
-                myTimer.schedule(myTask, 1000, frequency);
-            }
-
+            frequencyUnit = (Spinner) rootView.findViewById(R.id.frequencyUnit);
+            frequencyUnit.setSelection(1, true);
 
             Button updateMinder = (Button) rootView.findViewById(R.id.updateMinderButton);
             updateMinder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: Figure out how to update this
+                    updateMinder();
                 }
             });
 
@@ -152,11 +138,36 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
 
+        public long calculateFrequency(NumberPicker minderFrequency, Spinner frequencyUnit) {
+            long frequency = ((long) minderFrequency.getValue()) * 1000;
+            if (frequencyUnit.getSelectedItem().equals("Seconds")) {
+                frequency = frequency;
+            } else if (frequencyUnit.getSelectedItem().equals("Minutes")) {
+                frequency = frequency * 60;
+            } else if (frequencyUnit.getSelectedItem().equals("Hours")) {
+                frequency = frequency * 60 * 60;
+            }
+            return frequency;
+        }
+
+        private void updateMinder() {
+            final long frequency = calculateFrequency(minderFrequency, frequencyUnit);
+            startupFrequency = (int) frequency;
+            NotificationTimerTask myTask = new NotificationTimerTask();
+            timer.cancel();
+            timer = new Timer();
+
+            //Scheduling parameters are task, time till start, and time upon which to repeat
+            //30000 milliseconds is 30 seconds
+            timer.schedule(myTask, 1000, frequency);
+        }
+
         //Creates concrete class for abstract TimerTask
         class NotificationTimerTask extends TimerTask {
             public void run() {
-                createNotification(getCurrTime());
-
+                if (minderToggle) {
+                    createNotification(getCurrTime());
+                }
             }
         }
 
