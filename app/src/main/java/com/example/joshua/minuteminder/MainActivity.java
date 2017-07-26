@@ -3,10 +3,10 @@ package com.example.joshua.minuteminder;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static boolean minderToggle = false;
-        private static int startupFrequency = 31;
+        private static int startupFrequency = 30;
         private static Timer timer = new Timer();
         private NumberPicker minderFrequency;
         private Spinner frequencyUnit;
@@ -122,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     updateMinder();
+                    Snackbar.make(view, "Minder updated!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             });
 

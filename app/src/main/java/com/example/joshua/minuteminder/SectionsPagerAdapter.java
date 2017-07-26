@@ -37,7 +37,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Minders";
             case 1:
-                return "Alarms";
+                return "AutoSilence";
             case 2:
                 return "SECTION 3";
         }
