@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class MinderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private static boolean minderToggle = false;
         private static int startupFrequency = 30;
@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
         private NumberPicker minderFrequency;
         private Spinner frequencyUnit;
 
-        public PlaceholderFragment() {
+        public MinderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static MinderFragment newInstance(int sectionNumber) {
+            MinderFragment fragment = new MinderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            View rootView = inflater.inflate(R.layout.minder_fragment, container, false);
 
 
             minderFrequency = (NumberPicker) rootView.findViewById(R.id.minderFrequency);
@@ -205,6 +205,52 @@ public class MainActivity extends AppCompatActivity {
             String returner = "The time is ";
             returner += hour + ":" + min + am_pm;
             return returner;
+        }
+    }
+
+    public static class AutoSilenceFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public AutoSilenceFragment() {
+        }
+
+        public static AutoSilenceFragment newInstance(int sectionNumber) {
+            AutoSilenceFragment fragment = new AutoSilenceFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.autosilence_fragment, container, false);
+
+            return rootView;
+        }
+    }
+
+    public static class HistoryFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public HistoryFragment() {
+        }
+
+        public static HistoryFragment newInstance(int sectionNumber) {
+            HistoryFragment fragment = new HistoryFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.history_fragment, container, false);
+
+            return rootView;
         }
     }
 }
