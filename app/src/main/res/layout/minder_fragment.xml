@@ -37,11 +37,13 @@
 
         <!--"Minder frequency set to every" text-->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Minder frequency set to every"
-            android:layout_gravity="center|top"
+            android:textSize="25sp"
+            android:text="Frequency"
+            android:background="#000080"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
             android:layout_marginTop="10dp"/>
 
         <!--Frequency picking components-->
@@ -71,12 +73,13 @@
 
         <!--When do you want to receive minders?-->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="When do you want to receive minders?"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="10dp"/>
+            android:background="#000080"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            android:text="Active Hours"
+            android:gravity="center"/>
 
         <!--Minder time bounding components-->
         <LinearLayout
@@ -110,7 +113,7 @@
                         android:id="@+id/startHour"
                         android:layout_width="wrap_content"
                         android:layout_height="100dp"
-                        android:layout_weight=".6"
+                        android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginRight="10dp"
@@ -127,11 +130,20 @@
                         android:id="@+id/startMinute"
                         android:layout_width="wrap_content"
                         android:layout_height="100dp"
-                        android:layout_weight="1"
+                        android:layout_weight=".5"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginEnd="10dp"/>
+
+                    <ToggleButton
+                        android:id="@+id/startAMPM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:textOff="AM"
+                        android:textOn="PM"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -161,7 +173,7 @@
                         android:id="@+id/endHour"
                         android:layout_width="wrap_content"
                         android:layout_height="100dp"
-                        android:layout_weight=".6"
+                        android:layout_weight="1"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginRight="10dp"
@@ -178,11 +190,20 @@
                         android:id="@+id/endMinute"
                         android:layout_width="wrap_content"
                         android:layout_height="100dp"
-                        android:layout_weight="1"
+                        android:layout_weight=".5"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginEnd="10dp"/>
+
+                    <ToggleButton
+                        android:id="@+id/endAMPM"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:textOff="AM"
+                        android:textOn="PM"/>
 
                 </LinearLayout>
             </LinearLayout>
