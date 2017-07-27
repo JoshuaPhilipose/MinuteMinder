@@ -35,6 +35,7 @@
 
         </LinearLayout>
 
+        <!--"Minder frequency set to every" text-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,16 +44,17 @@
             android:layout_gravity="center|top"
             android:layout_marginTop="10dp"/>
 
+        <!--Frequency picking components-->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|top"
+            android:gravity="center"
             android:layout_marginTop="10dp">
 
             <NumberPicker
                 android:id="@+id/minderFrequency"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"/>
 
@@ -61,13 +63,134 @@
                 android:id="@+id/frequencyUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:spinnerMode="dropdown"
-                android:layout_marginTop="80dp"
                 android:entries="@array/unit_array">
             </Spinner>
         </LinearLayout>
 
-        <!--Contains all the day toggle buttons-->
+        <!--When do you want to receive minders?-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="When do you want to receive minders?"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="10dp"/>
+
+        <!--Minder time bounding components-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <!--Start time components-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!--Start Time text-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Start Time"
+                    android:textSize="20sp"/>
+
+                <!--Start time picker components-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <NumberPicker
+                        android:id="@+id/startHour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_weight=".6"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=":"
+                        android:textSize="30sp"/>
+
+                    <NumberPicker
+                        android:id="@+id/startMinute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--End time components-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!--End Time text-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="End Time"
+                    android:textSize="20sp"/>
+
+                <!--Start time picker components-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <NumberPicker
+                        android:id="@+id/endHour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_weight=".6"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text=":"
+                        android:textSize="30sp"/>
+
+                    <NumberPicker
+                        android:id="@+id/endMinute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="100dp"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--Day toggle components-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -135,9 +258,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-
-
-
 </android.support.design.widget.CoordinatorLayout>
