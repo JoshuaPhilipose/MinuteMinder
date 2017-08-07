@@ -121,10 +121,9 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.minder_fragment, container, false);
             SharedPreferences sharedPref = getContext().getSharedPreferences(minderPrefs, Context.MODE_PRIVATE);
-            int startupFrequency = sharedPref.getInt("startupFrequency", 30);
-
 
             //MINDER FREQUENCY
+            int startupFrequency = sharedPref.getInt("startupFrequency", 30);
             minderFrequency = (NumberPicker) rootView.findViewById(R.id.minderFrequency);
             String[] minderFrequencyNums = new String[60];
             for(int i = 0; i < minderFrequencyNums.length; i++) {
@@ -140,6 +139,11 @@ public class MainActivity extends AppCompatActivity {
             frequencyUnit.setSelection(1, true);
 
             //ACTIVE HOURS NUMBER PICKERS
+            int startupStartHour = sharedPref.getInt("startHour", 1);
+            int startupStartMinute = sharedPref.getInt("startMinute", 0);
+            int startupEndHour = sharedPref.getInt("endHour", 1);
+            int startupEndMinute = sharedPref.getInt("endMinute", 0);
+
             String[] hours = new String[12];
             for(int i = 0; i < hours.length; i++) {
                 hours[i] = Integer.toString(i + 1);
@@ -155,40 +159,28 @@ public class MainActivity extends AppCompatActivity {
             startHourPicker.setMaxValue(12);
             startHourPicker.setWrapSelectorWheel(true);
             startHourPicker.setDisplayedValues(hours);
-            startHourPicker.setValue(1);
+            startHourPicker.setValue(startupStartHour);
 
             startMinutePicker = (NumberPicker) rootView.findViewById(R.id.startMinute);
             startMinutePicker.setMinValue(1);
             startMinutePicker.setMaxValue(60);
             startMinutePicker.setWrapSelectorWheel(true);
             startMinutePicker.setDisplayedValues(minutes);
-            startMinutePicker.setValue(1);
-//            startMinutePicker.setFormatter(new NumberPicker.Formatter() {
-//                @Override
-//                public String format(int i) {
-//                    return String.format("%02d", i);
-//                }
-//            });
+            startMinutePicker.setValue(startupStartMinute + 1);
 
             endHourPicker = (NumberPicker) rootView.findViewById(R.id.endHour);
             endHourPicker.setMinValue(1);
             endHourPicker.setMaxValue(12);
             endHourPicker.setWrapSelectorWheel(true);
             endHourPicker.setDisplayedValues(hours);
-            endHourPicker.setValue(1);
+            endHourPicker.setValue(startupEndHour);
 
             endMinutePicker = (NumberPicker) rootView.findViewById(R.id.endMinute);
             endMinutePicker.setMinValue(1);
             endMinutePicker.setMaxValue(60);
             endMinutePicker.setWrapSelectorWheel(true);
             endMinutePicker.setDisplayedValues(minutes);
-            endMinutePicker.setValue(1);
-//            endMinutePicker.setFormatter(new NumberPicker.Formatter() {
-//                @Override
-//                public String format(int i) {
-//                    return String.format("%02d", i);
-//                }
-//            });
+            endMinutePicker.setValue(startupEndMinute + 1);
 
             setDividerColor(minderFrequency, Color.TRANSPARENT);
             setDividerColor(startHourPicker, Color.TRANSPARENT);
@@ -209,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             final ToggleButton startAMPM = (ToggleButton) rootView.findViewById(R.id.startAMPM);
+            startAMPM.setChecked(sharedPref.getBoolean("isStartPM", false));
             startAMPM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
@@ -220,9 +213,9 @@ public class MainActivity extends AppCompatActivity {
             });
 
             final ToggleButton endAMPM = (ToggleButton) rootView.findViewById(R.id.endAMPM);
+            endAMPM.setChecked(sharedPref.getBoolean("isEndPM", false));
             endAMPM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    boolean temp = endAMPM.isChecked();
                     if (isChecked) {
                         isEndPM = true;
                     } else {
@@ -238,10 +231,21 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     onOff.setChecked(true);
 
+                    SharedPreferences sharedPref = getContext().getSharedPreferences(minderPrefs, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+
                     startHour = startHourPicker.getValue();
                     endHour = endHourPicker.getValue();
                     startMinute = startMinutePicker.getValue() - 1;
                     endMinute = endMinutePicker.getValue() - 1;
+
+                    editor.putInt("startHour", startHour);
+                    editor.putInt("endHour", endHour);
+                    editor.putInt("startMinute", startMinute);
+                    editor.putInt("endMinute", endMinute);
+                    editor.putBoolean("isStartPM", isStartPM);
+                    editor.putBoolean("isEndPM", isEndPM);
+                    editor.apply();
 
                     //Convert to army time for easy calculation
                     startHour = isStartPM ? startHour + 12 : startHour;
