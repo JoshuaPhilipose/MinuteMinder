@@ -35,7 +35,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.example.joshua.minuteminder.R.id.container;
-import static com.example.joshua.minuteminder.R.id.minderFrequency;
 
 public class MainActivity extends AppCompatActivity {
 
