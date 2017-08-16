@@ -5,8 +5,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +24,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -78,19 +80,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class MinderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private static final String minderPrefs = "MinderPreferences";
+        private static final String calendarPrefs = "CalendarPreferences";
+        private static final String historyPrefs = "HistoryPreferences";
+
         private static boolean minderToggle = false;
-        private static int startupFrequency = 31;
+        private static boolean isStartPM = false;
+        private static boolean isEndPM = false;
+
         private static Timer timer = new Timer();
+        private int startHour = 8;
+        private int endHour = 20;
+        private int startMinute = 0;
+        private int endMinute = 0;
+
         private NumberPicker minderFrequency;
         private Spinner frequencyUnit;
+        private NumberPicker startHourPicker;
+        private NumberPicker startMinutePicker;
+        private NumberPicker endHourPicker;
+        private NumberPicker endMinutePicker;
 
-        public PlaceholderFragment() {
+        public MinderFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static MinderFragment newInstance(int sectionNumber) {
+            MinderFragment fragment = new MinderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -100,32 +118,77 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            View rootView = inflater.inflate(R.layout.minder_fragment, container, false);
+            SharedPreferences sharedPref = getContext().getSharedPreferences(minderPrefs, Context.MODE_PRIVATE);
 
-
+            //MINDER FREQUENCY
+            int startupFrequency = sharedPref.getInt("startupFrequency", 30);
             minderFrequency = (NumberPicker) rootView.findViewById(R.id.minderFrequency);
-            String[] nums = new String[60];
-            for(int i = 0; i < nums.length; i++) {
-                nums[i] = Integer.toString(i + 1);
+            String[] minderFrequencyNums = new String[60];
+            for(int i = 0; i < minderFrequencyNums.length; i++) {
+                minderFrequencyNums[i] = Integer.toString(i + 1);
             }
             minderFrequency.setMinValue(1);
             minderFrequency.setMaxValue(60);
             minderFrequency.setWrapSelectorWheel(true);
-            minderFrequency.setDisplayedValues(nums);
+            minderFrequency.setDisplayedValues(minderFrequencyNums);
             minderFrequency.setValue(startupFrequency);
 
             frequencyUnit = (Spinner) rootView.findViewById(R.id.frequencyUnit);
             frequencyUnit.setSelection(1, true);
 
-            Button updateMinder = (Button) rootView.findViewById(R.id.updateMinderButton);
-            updateMinder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    updateMinder();
-                }
-            });
+            //ACTIVE HOURS NUMBER PICKERS
+            int startupStartHour = sharedPref.getInt("startHour", 1);
+            int startupStartMinute = sharedPref.getInt("startMinute", 0);
+            int startupEndHour = sharedPref.getInt("endHour", 1);
+            int startupEndMinute = sharedPref.getInt("endMinute", 0);
 
-            ToggleButton onOff = (ToggleButton) rootView.findViewById(R.id.onOffToggle);
+            String[] hours = new String[12];
+            for(int i = 0; i < hours.length; i++) {
+                hours[i] = Integer.toString(i + 1);
+            }
+
+            String[] minutes = new String[60];
+            for(int i = 0; i < minutes.length; i++) {
+                minutes[i] = Integer.toString(i);
+            }
+
+            startHourPicker = (NumberPicker) rootView.findViewById(R.id.startHour);
+            startHourPicker.setMinValue(1);
+            startHourPicker.setMaxValue(12);
+            startHourPicker.setWrapSelectorWheel(true);
+            startHourPicker.setDisplayedValues(hours);
+            startHourPicker.setValue(startupStartHour);
+
+            startMinutePicker = (NumberPicker) rootView.findViewById(R.id.startMinute);
+            startMinutePicker.setMinValue(1);
+            startMinutePicker.setMaxValue(60);
+            startMinutePicker.setWrapSelectorWheel(true);
+            startMinutePicker.setDisplayedValues(minutes);
+            startMinutePicker.setValue(startupStartMinute + 1);
+
+            endHourPicker = (NumberPicker) rootView.findViewById(R.id.endHour);
+            endHourPicker.setMinValue(1);
+            endHourPicker.setMaxValue(12);
+            endHourPicker.setWrapSelectorWheel(true);
+            endHourPicker.setDisplayedValues(hours);
+            endHourPicker.setValue(startupEndHour);
+
+            endMinutePicker = (NumberPicker) rootView.findViewById(R.id.endMinute);
+            endMinutePicker.setMinValue(1);
+            endMinutePicker.setMaxValue(60);
+            endMinutePicker.setWrapSelectorWheel(true);
+            endMinutePicker.setDisplayedValues(minutes);
+            endMinutePicker.setValue(startupEndMinute + 1);
+
+            setDividerColor(minderFrequency, Color.TRANSPARENT);
+            setDividerColor(startHourPicker, Color.TRANSPARENT);
+            setDividerColor(startMinutePicker, Color.TRANSPARENT);
+            setDividerColor(endHourPicker, Color.TRANSPARENT);
+            setDividerColor(endMinutePicker, Color.TRANSPARENT);
+
+            //TOGGLES
+            final ToggleButton onOff = (ToggleButton) rootView.findViewById(R.id.onOffToggle);
             onOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
@@ -135,6 +198,65 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            final ToggleButton startAMPM = (ToggleButton) rootView.findViewById(R.id.startAMPM);
+            startAMPM.setChecked(sharedPref.getBoolean("isStartPM", false));
+            startAMPM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        isStartPM = true;
+                    } else {
+                        isStartPM = false;
+                    }
+                }
+            });
+
+            final ToggleButton endAMPM = (ToggleButton) rootView.findViewById(R.id.endAMPM);
+            endAMPM.setChecked(sharedPref.getBoolean("isEndPM", false));
+            endAMPM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        isEndPM = true;
+                    } else {
+                        isEndPM = false;
+                    }
+                }
+            });
+
+            //BUTTONS
+            Button updateMinder = (Button) rootView.findViewById(R.id.updateMinderButton);
+            updateMinder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onOff.setChecked(true);
+
+                    SharedPreferences sharedPref = getContext().getSharedPreferences(minderPrefs, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+
+                    startHour = startHourPicker.getValue();
+                    endHour = endHourPicker.getValue();
+                    startMinute = startMinutePicker.getValue() - 1;
+                    endMinute = endMinutePicker.getValue() - 1;
+
+                    editor.putInt("startHour", startHour);
+                    editor.putInt("endHour", endHour);
+                    editor.putInt("startMinute", startMinute);
+                    editor.putInt("endMinute", endMinute);
+                    editor.putBoolean("isStartPM", isStartPM);
+                    editor.putBoolean("isEndPM", isEndPM);
+                    editor.apply();
+
+                    //Convert to army time for easy calculation
+                    startHour = isStartPM ? startHour + 12 : startHour;
+                    endHour = isEndPM ? endHour + 12 : endHour;
+
+                    updateMinder();
+                    Snackbar.make(view, "Minder updated!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+
+
             return rootView;
         }
 
@@ -152,7 +274,13 @@ public class MainActivity extends AppCompatActivity {
 
         private void updateMinder() {
             final long frequency = calculateFrequency(minderFrequency, frequencyUnit);
-            startupFrequency = (int) frequency;
+
+            SharedPreferences sharedPref = getContext().getSharedPreferences(minderPrefs, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putInt("startupFrequency", minderFrequency.getValue());
+            editor.apply();
+
             NotificationTimerTask myTask = new NotificationTimerTask();
             timer.cancel();
             timer = new Timer();
@@ -162,10 +290,44 @@ public class MainActivity extends AppCompatActivity {
             timer.schedule(myTask, 1000, frequency);
         }
 
+        private boolean checkTimeBoundary() {
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR);
+            int minute = calendar.get(Calendar.MINUTE);
+            String am_pm = (int) calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+            hour = am_pm == "AM" ? hour : hour + 12;
+
+            if (startHour <= endHour) {
+                if (startHour < hour && hour < endHour) {//Is it between the start/end hours?
+                    return true;
+                } else if (startHour == hour && hour == endHour) {//if all are the same hour, check minutes - if it isn't in between, must be false
+                    if (startMinute <= hour && hour <= endMinute) {
+                        return true;
+                    }
+                    return false;
+                } else if (startHour == hour && hour < endHour) {
+                    if (startMinute <= minute) {
+                        return true;
+                    }
+                    return false;
+                } else if (startHour < hour && hour == endHour) {
+                    if (minute <= endMinute) {
+                        return true;
+                    }
+                    return false;
+                }
+            } else if (startHour > endHour) {
+                //TODO: Don't do this yet, let's just see if it works so far
+            }
+
+            return false;
+        }
+
         //Creates concrete class for abstract TimerTask
         class NotificationTimerTask extends TimerTask {
             public void run() {
-                if (minderToggle) {
+                boolean temp = checkTimeBoundary();
+                if (minderToggle && temp) {
                     createNotification(getCurrTime());
                 }
             }
@@ -206,6 +368,73 @@ public class MainActivity extends AppCompatActivity {
             String returner = "The time is ";
             returner += hour + ":" + min + am_pm;
             return returner;
+        }
+
+        private void setDividerColor(NumberPicker picker, int color) {
+            java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+            for (java.lang.reflect.Field pf : pickerFields) {
+                if (pf.getName().equals("mSelectionDivider")) {
+                    pf.setAccessible(true);
+                    try {
+                        ColorDrawable colorDrawable = new ColorDrawable(color);
+                        pf.set(picker, colorDrawable);
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    public static class AutoSilenceFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public AutoSilenceFragment() {
+        }
+
+        public static AutoSilenceFragment newInstance(int sectionNumber) {
+            AutoSilenceFragment fragment = new AutoSilenceFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.autosilence_fragment, container, false);
+
+            return rootView;
+        }
+    }
+
+    public static class HistoryFragment extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public HistoryFragment() {
+        }
+
+        public static HistoryFragment newInstance(int sectionNumber) {
+            HistoryFragment fragment = new HistoryFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.history_fragment, container, false);
+
+            return rootView;
         }
     }
 }

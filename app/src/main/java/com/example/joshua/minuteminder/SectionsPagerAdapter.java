@@ -21,8 +21,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return MainActivity.PlaceholderFragment.newInstance(position + 1);
+        if (position == 0) {
+            return MainActivity.MinderFragment.newInstance(position + 1);
+        } else if (position == 1) {
+            return MainActivity.AutoSilenceFragment.newInstance(position + 1);
+        } else if (position == 2) {
+            return MainActivity.HistoryFragment.newInstance(position + 1);
+        } else {
+            return MainActivity.MinderFragment.newInstance(position + 1);
+        }
+
     }
 
     @Override
@@ -37,7 +45,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Minders";
             case 1:
-                return "Alarms";
+                return "AutoSilence";
             case 2:
                 return "SECTION 3";
         }
