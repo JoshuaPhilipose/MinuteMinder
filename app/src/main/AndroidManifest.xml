@@ -23,6 +23,10 @@
             android:name=".CreateMinder"
             android:label="Create Minder">
         </activity>
+
+        <service
+            android:name=".MinderService"
+            android:exported="false"/>
     </application>
 
 </manifest>

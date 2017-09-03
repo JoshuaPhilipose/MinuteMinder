@@ -1,8 +1,10 @@
 package com.example.joshua.minuteminder;
 
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,12 +14,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +32,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import java.util.Calendar;
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+
+    private static final String minderPrefs = "MinderPreferences";
+    private static final String calendarPrefs = "CalendarPreferences";
+    private static final String historyPrefs = "HistoryPreferences";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static class MinderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
-
-        private static final String minderPrefs = "MinderPreferences";
-        private static final String calendarPrefs = "CalendarPreferences";
-        private static final String historyPrefs = "HistoryPreferences";
 
         private static boolean minderToggle = false;
         private static boolean isStartPM = false;
@@ -256,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-
             return rootView;
         }
 
@@ -337,7 +341,6 @@ public class MainActivity extends AppCompatActivity {
 
             long when = System.currentTimeMillis();
             String appName = getContext().getResources().getString(R.string.app_name);
-//            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
 
             PendingIntent contentIntent = PendingIntent.getActivity(getContext(), 0, new Intent(getActivity(), MainActivity.class), 0);
@@ -388,6 +391,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 }
+            }
+        }
+
+        public static class StartTimePickerFragment extends DialogFragment
+                implements TimePickerDialog.OnTimeSetListener {
+
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                // Use the current time as the default values for the picker
+                final Calendar c = Calendar.getInstance();
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+
+                // Create a new instance of TimePickerDialog and return it
+                return new TimePickerDialog(getActivity(), this, hour, minute,
+                        DateFormat.is24HourFormat(getActivity()));
+            }
+
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                // Do something with the time chosen by the user
             }
         }
     }
