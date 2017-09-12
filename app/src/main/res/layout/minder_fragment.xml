@@ -103,49 +103,20 @@
                     android:text="Start Time"
                     android:textSize="20sp"/>
 
-                <!--Start time picker components-->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/currStartTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center"
+                    android:text="Current Start Time"
+                    android:textSize="20sp"/>
 
-                    <NumberPicker
-                        android:id="@+id/startHour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="120dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginEnd="10dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text=":"
-                        android:textSize="30sp"/>
-
-                    <NumberPicker
-                        android:id="@+id/startMinute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="120dp"
-                        android:layout_weight=".5"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginEnd="10dp" />
-
-                    <ToggleButton
-                        android:id="@+id/startAMPM"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:textOff="AM"
-                        android:textOn="PM"/>
-
-                </LinearLayout>
+                <Button
+                    android:id="@+id/pickStartTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Change Time"/>
             </LinearLayout>
 
             <!--End time components-->
@@ -163,49 +134,21 @@
                     android:text="End Time"
                     android:textSize="20sp"/>
 
-                <!--end time picker components-->
-                <LinearLayout
+                <TextView
+                    android:id="@+id/currEndTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_gravity="center"
+                    android:text="Current End Time"
+                    android:textSize="20sp"/>
 
-                    <NumberPicker
-                        android:id="@+id/endHour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="120dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginEnd="10dp"/>
+                <Button
+                    android:id="@+id/pickEndTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Change Time"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text=":"
-                        android:textSize="30sp"/>
-
-                    <NumberPicker
-                        android:id="@+id/endMinute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="120dp"
-                        android:layout_weight=".5"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginEnd="10dp"/>
-
-                    <ToggleButton
-                        android:id="@+id/endAMPM"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:textOff="AM"
-                        android:textOn="PM"/>
-
-                </LinearLayout>
             </LinearLayout>
 
 
