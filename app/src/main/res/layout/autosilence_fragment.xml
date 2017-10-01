@@ -10,9 +10,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.joshua.minuteminder.MainActivity$AutoSilenceFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Autosilencer page coming soon!!"
-        android:textSize="22sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/CallGoogleCalendarAPI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Call Google Calendar API"/>
+
+        <TextView
+            android:id="@+id/APICallResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click the button to test the Google Calendar API"
+            android:textSize="22sp"
+            android:layout_marginBottom="20dp"/>
+
+
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>
